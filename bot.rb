@@ -50,15 +50,28 @@ i = 0
 
 loop do
   response = client.get("myje-ith7", {:case_group => "WEEDS AND VEGETATION"})
+  twitter_client.user_timeline("weed_violations").each do |tweet|
+    tweeted << tweet.text
+    tweeted << tweet.text[2..-1]
+    tweeted << tweet.text[2..-4]
+    tweeted << tweet.text[4..-2]
+    tweeted << tweet.text[2..-4]
+  end if tweeted.length == 0
   if tweeted.include?(response[i].description)
+    puts "already tweeted"
     i += 1
-    sleep 900
+    sleep 1
   else
-    tweet = build_tweet(response[i].description)
-    twitter_client.update(tweet)
-    tweeted << response[i].description
-    i = 0
-    sleep 1800 # every 30 mins
+    if response[i].description.nil?
+      puts "nil response"
+      i += 1
+    else
+      tweet = build_tweet(response[i].description)
+      twitter_client.update(tweet)
+      tweeted << response[i].description
+      i = 0
+      sleep 1800 # every 30 mins is 1800
+    end
   end
 end
 
