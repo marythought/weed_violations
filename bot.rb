@@ -70,7 +70,7 @@ loop do
       twitter_client.update(tweet)
       tweeted << response[i].description
       i = 0
-      sleep 1800 # every 30 mins is 1800
+      sleep 10800 # every 30 mins is 1800
     end
   end
 end
